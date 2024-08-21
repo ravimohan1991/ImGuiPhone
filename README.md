@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://github.com/user-attachments/assets/9b3fe128-a9f4-4319-9139-5bc4606250eb" alt="image" width="300" height="auto">
+<img src="https://github.com/user-attachments/assets/5fe85452-5375-4038-a7f0-ce6451c82082" alt="image" width="300" height="auto">
 </p>
 
 # hello_imgui_template: get started with HelloImGui in 5 minutes (almost) 
