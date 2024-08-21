@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 project(helloworld_with_helloimgui)
 set(CMAKE_CXX_STANDARD 17)
 
+set(HELLOIMGUI_USE_FREETYPE "off")
+
 # Build hello_imgui
 # =================
 # 1/  Option 1: if you added hello_imgui as a subfolder, you can add it to your project with:
