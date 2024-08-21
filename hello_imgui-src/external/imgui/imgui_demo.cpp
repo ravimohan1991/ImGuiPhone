@@ -203,6 +203,7 @@ static void ShowExampleAppDockSpace(bool* p_open);
 static void ShowExampleAppDocuments(bool* p_open);
 static void ShowExampleAppLog(bool* p_open);
 static void ShowExampleAppLayout(bool* p_open);
+static void ShowExampleAppKeyPad(bool* p_open);
 static void ShowExampleAppPropertyEditor(bool* p_open);
 static void ShowExampleAppSimpleOverlay(bool* p_open);
 static void ShowExampleAppAutoResize(bool* p_open);
@@ -291,6 +292,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     static bool show_app_layout = false;
     static bool show_app_property_editor = false;
     static bool show_app_simple_overlay = false;
+    static bool show_app_key_pad = false;
     static bool show_app_auto_resize = false;
     static bool show_app_constrained_resize = false;
     static bool show_app_fullscreen = false;
@@ -306,6 +308,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     if (show_app_layout)              ShowExampleAppLayout(&show_app_layout);
     if (show_app_property_editor)     ShowExampleAppPropertyEditor(&show_app_property_editor);
     if (show_app_simple_overlay)      ShowExampleAppSimpleOverlay(&show_app_simple_overlay);
+    if (show_app_key_pad)             ShowExampleAppKeyPad(&show_app_key_pad);
     if (show_app_auto_resize)         ShowExampleAppAutoResize(&show_app_auto_resize);
     if (show_app_constrained_resize)  ShowExampleAppConstrainedResize(&show_app_constrained_resize);
     if (show_app_fullscreen)          ShowExampleAppFullscreen(&show_app_fullscreen);
@@ -405,6 +408,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
             ImGui::MenuItem("Property editor", NULL, &show_app_property_editor);
             ImGui::MenuItem("Simple layout", NULL, &show_app_layout);
             ImGui::MenuItem("Simple overlay", NULL, &show_app_simple_overlay);
+            ImGui::MenuItem("Khur Patal (keypad)", NULL, &show_app_key_pad);
 
             ImGui::SeparatorText("Concepts");
             ImGui::MenuItem("Auto-resizing window", NULL, &show_app_auto_resize);
@@ -8113,6 +8117,33 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
         }
     }
     ImGui::End();
+}
+
+//-----------------------------------------------------------------------------
+// [SECTION] Example Application: Simple Keypad / ShowExampleAppKeyPad()
+// Courtsey: https://github.com/ocornut/imgui/issues/4066
+//-----------------------------------------------------------------------------
+static void ShowExampleAppKeyPad(bool* p_open)
+{
+    static std::string test3 = " ";
+    
+    ImGui::KeypadEditString("Test3", &test3);
+    
+        static std::string test4 = " ";
+        if (ImGui::KeypadEditString("Test4", &test4) == 1)
+        {
+            // enter / apply pressed 
+        }
+    
+        static std::string test5 = " ";
+        if (ImGui::KeypadEditString("Test5", &test5) == -1)
+        {
+            // Cancel / Undo 
+        }
+    
+       // .....
+     
+        ImGui::PopupKeypad();
 }
 
 //-----------------------------------------------------------------------------

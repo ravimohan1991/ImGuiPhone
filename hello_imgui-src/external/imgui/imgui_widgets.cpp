@@ -7917,6 +7917,152 @@ bool ImGui::MenuItem(const char* label, const char* shortcut, bool* p_selected, 
     return false;
 }
 
+int ImGui::InputKeypad(const char *label, bool* p_visible, std::string *value)
+{
+    int ret = 0;
+
+    if (p_visible && !*p_visible)
+        return ret;
+    if (!value || !label)
+        return ret;
+
+    ImVec2 csize = GetContentRegionAvail();
+    int n = (csize.y / 5); // height / 5 button rows
+
+    ImGuiStyle &style = GetStyle();
+          
+    if (BeginChild(label, ImVec2((n * 4) + style.WindowPadding.x, n * 5), true))
+    {
+        
+        csize = GetContentRegionAvail(); // now inside this child
+        n = (csize.y / 5) - style.ItemSpacing.y; // button size
+        ImVec2 bsize(n, n); // buttons are square
+
+        PushStyleVar(ImGuiStyleVar_FrameRounding,6);
+        
+        static std::string k = "";
+        
+        if (Button("ESC", bsize)) { k = "X"; } SameLine();
+        if (Button("/", bsize)) { k = "/"; } SameLine(); 
+        if (Button("*", bsize)) { k = "*"; } SameLine(); 
+        if (Button("-", bsize)) { k = "-"; }
+        if (Button("7", bsize)) { k = "7"; } SameLine();
+        if (Button("8", bsize)) { k = "8"; } SameLine(); 
+        if (Button("9", bsize)) { k = "9"; } SameLine(); 
+        if (Button("+", bsize)) { k = "+"; }
+        if (Button("4", bsize)) { k = "4"; } SameLine(); 
+        if (Button("5", bsize)) { k = "5"; } SameLine(); 
+        if (Button("6", bsize)) { k = "6"; } SameLine(); 
+        if (Button("<-", bsize)) { k = "B"; }  
+        if (Button("1", bsize)) { k = "1"; } SameLine(); 
+        if (Button("2", bsize)) { k = "2"; } SameLine(); 
+        if (Button("3", bsize)) { k = "3"; } SameLine(); 
+        if (Button("CLR", bsize)) { k = "C";} 
+        if (Button("0", bsize)) { k = "0"; } SameLine(); 
+        if (Button("0", bsize)) { k = "0"; } SameLine(); 
+        if (Button(".", bsize)) { k = "."; } SameLine(); 
+        if (Button("=", bsize)) { k = "E"; }
+
+        PopStyleVar();
+
+        // logic
+        if (k != "")
+        {
+            if (k != "E" && k != "X" && k != "B" && k != "C")
+            {
+                value->append(k); // add k to the string
+            } 
+            else
+            {
+                if (k == "E")
+                {   // enter
+                    ret = 1; // value has been accepted
+                }
+                else if (k == "B")
+                {   // remove one char from the string
+                    std::string tvalue = value->substr(0, value->length() - 1);
+                    value->swap(tvalue);
+                } else if (k == "C")
+                {
+                    value->clear();
+                }
+                else if (k == "X")
+                {   // cancel
+                    ret = -1; //  restore old value
+                }
+            }
+            if (ret) *p_visible = false;
+        }
+        k = "";
+        EndChild();
+    }
+    g_KeypadApplyMap[label] = ret; // store results in map
+    return ret;
+}
+
+int ImGui::KeypadEditString(const char *label, std::string *value)
+{
+    if (!label || !value) return 0;
+
+    Text(label);
+    SameLine();
+    InputText(label, value->data(), value->capacity()); 
+    
+    if (IsItemHovered() && IsMouseClicked(ImGuiMouseButton_Left))
+    {
+        if (value != g_KeypadEditStrPtr)
+        {
+            g_KeypadEditStrRestore = value->c_str();
+            g_KeypadEditStrPtr = value;
+            g_KeypadApplyMap[label] = 0;
+            g_KeypadCurrentLabel = (char*)label;
+        }
+        OpenPopup("Khur Patal"); 
+    }
+
+    if (g_KeypadApplyMap[label] == 1)
+    {
+        g_KeypadApplyMap[label] = 0;
+        return 1;
+    } else if (g_KeypadApplyMap[label] == -1)
+    {
+        g_KeypadApplyMap[label] = 0;
+        return -1;
+    }
+
+    return 0;
+}
+
+void ImGui::PopupKeypad(void)
+{
+    // Always center this window when appearing
+    ImVec2 center = GetMainViewport()->GetCenter();
+    SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    SetNextWindowSize(ImVec2(300,400));
+
+    if (BeginPopupModal("Khur Patal", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        if (g_KeypadEditStrPtr != nullptr)
+        {
+            bool gShowKeypad = true;
+            Text(g_KeypadEditStrPtr->c_str());
+            int r = InputKeypad("Keypad Input", &gShowKeypad, g_KeypadEditStrPtr);
+            if (r == -1)
+            {
+                // undo - restore previous value
+                g_KeypadEditStrPtr->swap(g_KeypadEditStrRestore);
+                g_KeypadApplyMap[g_KeypadCurrentLabel] = -1;
+            }
+            else if (r == 1) {
+                // set - we should apply the new value 
+                g_KeypadApplyMap[g_KeypadCurrentLabel] = 1;
+            }
+            if (!gShowKeypad) CloseCurrentPopup();
+        }
+        EndPopup();
+    }
+}
+
 //-------------------------------------------------------------------------
 // [SECTION] Widgets: BeginTabBar, EndTabBar, etc.
 //-------------------------------------------------------------------------

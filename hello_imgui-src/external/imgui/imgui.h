@@ -306,6 +306,8 @@ IM_MSVC_RUNTIME_CHECKS_RESTORE
 // (Note that ImGui:: being a namespace, you can add extra ImGui:: functions in your own separate file. Please don't modify imgui source files!)
 //-----------------------------------------------------------------------------
 
+#include "string"
+#include "map"
 namespace ImGui
 {
     // Context creation and access
@@ -709,6 +711,45 @@ namespace ImGui
     IMGUI_API void          EndMenu();                                                          // only call EndMenu() if BeginMenu() returns true!
     IMGUI_API bool          MenuItem(const char* label, const char* shortcut = NULL, bool selected = false, bool enabled = true);  // return true when activated.
     IMGUI_API bool          MenuItem(const char* label, const char* shortcut, bool* p_selected, bool enabled = true);              // return true when activated + toggle (*p_selected) if p_selected != NULL
+    
+    // Widgets: KeyPads
+    
+    // Some variables
+    static std::map<const char *, int> g_KeypadApplyMap; // map of labels to return values
+    static char * g_KeypadCurrentLabel; // only one instance of Keypad is open at any one time
+    static std::string  *g_KeypadEditStrPtr;  // pointer to string to edit
+    static std::string  g_KeypadEditStrRestore; // stored value for undo
+    
+    /**
+     * Draw a 4x5 button matrix entry keypad edits a *value std::string,
+     * scaled to the current content region height with square buttons    
+     * 
+     * @brief InputKeypad
+     * @param label
+     * @param p_visible
+     * @param value
+     * @return 
+     */
+    IMGUI_API int          InputKeypad(const char *label, bool* p_visible, std::string *value);
+    
+    /**
+     * The widget takes a label, and a *std::string
+     * returns 1 if the new value should be accepted, enter pressed 
+     * returns 0 if nothing happened
+     * return -1 if cancel pressed, 
+     * previous value has been restored     
+     * 
+     * @brief KeypadEditString
+     * @param label
+     * @param value
+     * @return 
+     */
+    IMGUI_API int          KeypadEditString(const char *label, std::string *value);
+    
+    /**
+     * Show the popup keypad box as required.
+     */ 
+    IMGUI_API void          PopupKeypad(void);
 
     // Tooltips
     // - Tooltips are windows following the mouse. They do not take focus away.
