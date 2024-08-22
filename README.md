@@ -73,3 +73,5 @@ cd hello_imgui_template
 ```
 
 Then, open the XCode project in KarmaiOSLighthouse/helloworld_with_helloimgui.xcodeproj and deploy on your desired device.
+
+For dealing with Apples's [appID insanity](https://stackoverflow.com/questions/36922738/how-to-get-around-apple-app-id-insanity), a workaround is like [so](https://github.com/user-attachments/assets/5fe85452-5375-4038-a7f0-ce6451c82082).
