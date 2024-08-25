@@ -101,6 +101,8 @@ Index of this file:
 #endif
 
 #include "imgui.h"
+#include "audio.h"
+
 #ifndef IMGUI_DISABLE
 
 // System includes
@@ -8125,25 +8127,29 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
 //-----------------------------------------------------------------------------
 static void ShowExampleAppKeyPad(bool* p_open)
 {
-    static std::string test3 = " ";
-    
-    ImGui::KeypadEditString("Test3", &test3);
-    
-        static std::string test4 = " ";
-        if (ImGui::KeypadEditString("Test4", &test4) == 1)
-        {
-            // enter / apply pressed 
-        }
-    
-        static std::string test5 = " ";
-        if (ImGui::KeypadEditString("Test5", &test5) == -1)
-        {
-            // Cancel / Undo 
-        }
-    
-       // .....
-     
-        ImGui::PopupKeypad();
+	static std::string test3 = " ";
+
+	// Initialize SDL2 Audio only
+	//SDL_Init(SDL_INIT_AUDIO);
+
+	// Initialize Simple-SDL2-Audio
+	//initAudio();
+
+	ImGui::KeypadEditString("Test3", &test3);
+
+	static std::string test4 = " ";
+	if (ImGui::KeypadEditString("Test4", &test4) == 1)
+	{
+		// enter / apply pressed
+	}
+
+	static std::string test5 = " ";
+	if (ImGui::KeypadEditString("Test5", &test5) == -1)
+	{
+		// Cancel / Undo
+	}
+
+	ImGui::PopupKeypad();
 }
 
 //-----------------------------------------------------------------------------

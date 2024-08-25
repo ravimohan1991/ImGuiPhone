@@ -1,4 +1,5 @@
 #include "hello_imgui/hello_imgui.h"
+#include "audio.h"
 
 int main(int , char *[])
 {
@@ -17,6 +18,20 @@ int main(int , char *[])
 		}
 	};
 	
+	// Initialize SDL2 Audio only
+	SDL_Init(SDL_INIT_AUDIO);
+
+	// Initialize Simple-SDL2-Audio
+	initAudio();
+
+	playSound("asound.wav", SDL_MIX_MAXVOLUME / 2);
+
+	// Let play for 1 second
+	SDL_Delay(1000);
+
+	// End Simple-SDL2-Audio
+	endAudio();
+
 	HelloImGui::Run(guiFunction, "Hello, globe", true);
 	return 0;
 }

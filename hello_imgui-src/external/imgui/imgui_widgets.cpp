@@ -44,6 +44,7 @@ Index of this file:
 
 // System includes
 #include <stdint.h>     // intptr_t
+#include "audio.h"
 
 //-------------------------------------------------------------------------
 // Warnings
@@ -7939,29 +7940,47 @@ int ImGui::InputKeypad(const char *label, bool* p_visible, std::string *value)
         ImVec2 bsize(n, n); // buttons are square
 
         PushStyleVar(ImGuiStyleVar_FrameRounding,6);
-        
+		static bool bPlayingTone = false;
+
         static std::string k = "";
         
-        if (Button("ESC", bsize)) { k = "X"; } SameLine();
-        if (Button("/", bsize)) { k = "/"; } SameLine(); 
-        if (Button("*", bsize)) { k = "*"; } SameLine(); 
-        if (Button("-", bsize)) { k = "-"; }
-        if (Button("7", bsize)) { k = "7"; } SameLine();
-        if (Button("8", bsize)) { k = "8"; } SameLine(); 
-        if (Button("9", bsize)) { k = "9"; } SameLine(); 
-        if (Button("+", bsize)) { k = "+"; }
-        if (Button("4", bsize)) { k = "4"; } SameLine(); 
-        if (Button("5", bsize)) { k = "5"; } SameLine(); 
-        if (Button("6", bsize)) { k = "6"; } SameLine(); 
-        if (Button("<-", bsize)) { k = "B"; }  
-        if (Button("1", bsize)) { k = "1"; } SameLine(); 
-        if (Button("2", bsize)) { k = "2"; } SameLine(); 
-        if (Button("3", bsize)) { k = "3"; } SameLine(); 
-        if (Button("CLR", bsize)) { k = "C";} 
-        if (Button("0", bsize)) { k = "0"; } SameLine(); 
-        if (Button("0", bsize)) { k = "0"; } SameLine(); 
-        if (Button(".", bsize)) { k = "."; } SameLine(); 
-        if (Button("=", bsize)) { k = "E"; }
+        if (Button("ESC", bsize)) { k = "X"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true;} SameLine();
+		if (Button("/", bsize)) { k = "/"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("*", bsize)) { k = "*"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("-", bsize)) { k = "-"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; }
+        if (Button("7", bsize)) { k = "7"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("8", bsize)) { k = "8"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("9", bsize)) { k = "9"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("+", bsize)) { k = "+"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; }
+        if (Button("4", bsize)) { k = "4"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("5", bsize)) { k = "5"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("6", bsize)) { k = "6"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("<-", bsize)) { k = "B"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; }
+        if (Button("1", bsize))
+		{
+			k = "1";
+			initAudio();
+			playSound("asound.wav", SDL_MIX_MAXVOLUME / 2);
+			bPlayingTone = true;
+		}
+		SameLine();
+        if (Button("2", bsize)) { k = "2"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("3", bsize)) { k = "3"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("CLR", bsize)) { k = "C"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; }
+        if (Button("0", bsize)) { k = "0"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("0", bsize)) { k = "0"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button(".", bsize)) { k = "."; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; } SameLine();
+        if (Button("=", bsize)) { k = "E"; initAudio(); playSound("asound.wav", SDL_MIX_MAXVOLUME / 2); bPlayingTone = true; }
+
+		if(bPlayingTone)
+		{
+			// Let play for 1 second
+			 SDL_Delay(1000);
+
+			// End Simple-SDL2-Audio
+			endAudio();
+			bPlayingTone = false;
+		}
 
         PopStyleVar();
 

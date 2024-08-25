@@ -339,7 +339,7 @@ function(_him_checkout_imgui_submodule_if_needed)
 endfunction()
 
 function(_him_do_build_imgui)
-    file(GLOB imgui_sources ${HELLOIMGUI_IMGUI_SOURCE_DIR}/*.h ${HELLOIMGUI_IMGUI_SOURCE_DIR}/*.cpp)
+    file(GLOB imgui_sources ${HELLOIMGUI_IMGUI_SOURCE_DIR}/*.h ${HELLOIMGUI_IMGUI_SOURCE_DIR}/*.cpp ${HELLOIMGUI_IMGUI_SOURCE_DIR}/*.c)
     set(imgui_sources ${imgui_sources}
         ${HELLOIMGUI_IMGUI_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
         ${HELLOIMGUI_IMGUI_SOURCE_DIR}/misc/cpp/imgui_stdlib.h)
@@ -880,6 +880,7 @@ function (him_use_sdl2_backend target)
     _him_fetch_sdl_if_needed()
     #    _him_fail_if_sdl_not_found()
     _him_link_sdl(${HELLOIMGUI_TARGET})
+    target_include_directories(imgui PUBLIC ${CMAKE_BINARY_DIR}/_deps/sdl-src/include/)
 
     # vcpkg will have added those files to imgui
     if (NOT HELLOIMGUI_USE_IMGUI_CMAKE_PACKAGE)
